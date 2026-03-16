@@ -7,8 +7,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'Beatitude Model School - Excellence in Education',
+  description: 'Beatitude Model School is committed to nurturing young minds through quality education, character development, and academic excellence.',
   generator: 'v0.app',
   icons: {
     icon: [
