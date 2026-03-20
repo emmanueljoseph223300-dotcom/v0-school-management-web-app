@@ -31,7 +31,7 @@ export default function AboutPage() {
                 <h2 className="text-3xl font-bold mb-6">Our Story</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    Founded in 1995, Beatitude Model School began with a simple yet powerful vision: to provide quality education that nurtures both academic excellence and strong moral character.
+                    Founded in 2023, Beatitude Model School began with a simple yet powerful vision: to provide quality education that nurtures both academic excellence and strong moral character.
                   </p>
                   <p>
                     Over the past 25+ years, we have grown from a small primary school to a comprehensive institution offering education from primary through secondary levels. Our graduates have gone on to excel in various fields, carrying with them the values and knowledge instilled during their time with us.
