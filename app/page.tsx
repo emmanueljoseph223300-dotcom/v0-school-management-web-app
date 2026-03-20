@@ -155,7 +155,7 @@ export default function HomePage() {
                   <div className="text-muted-foreground">Expert Teachers</div>
                 </Card>
                 <Card className="p-6">
-                  <div className="text-4xl font-bold mb-2 text-primary">25+</div>
+                  <div className="text-4xl font-bold mb-2 text-primary">6+</div>
                   <div className="text-muted-foreground">Years of Excellence</div>
                 </Card>
                 <Card className="p-6 bg-secondary">
