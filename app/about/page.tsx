@@ -34,7 +34,7 @@ export default function AboutPage() {
                     Founded in 2023, Beatitude Model School began with a simple yet powerful vision: to provide quality education that nurtures both academic excellence and strong moral character.
                   </p>
                   <p>
-                    Over the past 25+ years, we have grown from a small primary school to a comprehensive institution offering education from primary through secondary levels. Our graduates have gone on to excel in various fields, carrying with them the values and knowledge instilled during their time with us.
+                    Over the past 6+ years, we have grown from a small primary school to a comprehensive institution offering education from primary through secondary levels. Our graduates have gone on to excel in various fields, carrying with them the values and knowledge instilled during their time with us.
                   </p>
                   <p>
                     Today, we continue to evolve, embracing modern teaching methods and technology while staying true to our founding principles of excellence, integrity, and holistic development.
