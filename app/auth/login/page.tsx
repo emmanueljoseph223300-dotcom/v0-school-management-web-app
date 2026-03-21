@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
@@ -10,7 +10,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FieldGroup, Field, FieldLabel, FieldError } from "@/components/ui/field"
 import { GraduationCap, Loader2 } from "lucide-react"
 
-export default function LoginPage() {
+// 👇 MOVE your original logic here
+function LoginContent() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -37,7 +38,6 @@ export default function LoginPage() {
       return
     }
 
-    // Get user role and redirect accordingly
     const role = data.user?.user_metadata?.role
 
     if (redirectTo) {
@@ -116,5 +116,14 @@ export default function LoginPage() {
         </form>
       </Card>
     </div>
+  )
+}
+
+// 👇 THIS is the fix
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   )
 }
