@@ -16,10 +16,20 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  // If Supabase env vars are not set, redirect to login
+  if (!supabaseUrl || !supabaseAnonKey) {
+    const redirectUrl = new URL("/auth/login", request.url)
+    redirectUrl.searchParams.set("redirectTo", pathname)
+    return NextResponse.redirect(redirectUrl)
+  }
+
   // Create a Supabase client to check the user
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
