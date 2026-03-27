@@ -21,22 +21,32 @@ export default async function StudentDashboardPage() {
   const { data: results } = await supabase
     .from("results")
     .select(`
-      *,
+      id,
+      term,
+      session,
+      total,
       subject:subject_id (id, name)
     `)
     .eq("student_id", user?.id)
     .order("created_at", { ascending: false })
 
-  // Calculate average score
+  // Calculate average score using total field
   const averageScore = results && results.length > 0
-    ? Math.round(results.reduce((sum, r) => sum + (r.score || 0), 0) / results.length)
+    ? Math.round(results.reduce((sum, r) => sum + (r.total || 0), 0) / results.length)
     : 0
 
-  // Get subjects for the student's class
+  // Get subjects for the student's class via class_subjects junction table
+  const { data: classSubjects } = await supabase
+    .from("class_subjects")
+    .select("subject_id")
+    .eq("class_id", profile?.class_id)
+
+  const subjectIds = classSubjects?.map(cs => cs.subject_id) || []
+  
   const { data: subjects } = await supabase
     .from("subjects")
     .select("*")
-    .eq("class_id", profile?.class_id)
+    .in("id", subjectIds.length > 0 ? subjectIds : ["none"])
 
   // Get active announcements
   const { data: announcements } = await supabase
@@ -96,12 +106,12 @@ export default async function StudentDashboardPage() {
                   <div key={result.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                     <div>
                       <p className="font-medium">{result.subject?.name}</p>
-                      <p className="text-sm text-muted-foreground">{result.exam_type}</p>
+                      <p className="text-sm text-muted-foreground">{result.term} - {result.session}</p>
                     </div>
                     <Badge 
-                      variant={result.score >= 70 ? "default" : result.score >= 50 ? "secondary" : "destructive"}
+                      variant={(result.total || 0) >= 70 ? "default" : (result.total || 0) >= 50 ? "secondary" : "destructive"}
                     >
-                      {result.score}%
+                      {result.total}%
                     </Badge>
                   </div>
                 ))}

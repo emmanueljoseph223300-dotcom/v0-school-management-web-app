@@ -29,7 +29,17 @@ export default async function TeacherResultsPage() {
   const { data: existingResults } = await supabase
     .from("results")
     .select(`
-      *,
+      id,
+      student_id,
+      subject_id,
+      class_id,
+      term,
+      session,
+      ca_score,
+      exam_score,
+      total,
+      grade,
+      created_at,
       student:student_id (id, first_name, last_name),
       subject:subject_id (id, name),
       class:class_id (id, name)

@@ -50,7 +50,7 @@ interface ExistingResult {
   session: string
   ca_score: number | null
   exam_score: number | null
-  total_score: number | null
+  total: number | null
   grade: string | null
   student: { id: string; first_name: string; last_name: string } | null
   subject: { id: string; name: string } | null
@@ -142,7 +142,7 @@ export function TeacherResultsForm({
           session,
           ca_score: ca,
           exam_score: exam,
-          total_score: total,
+          total: total,
           grade,
         })
       }
@@ -370,7 +370,7 @@ export function TeacherResultsForm({
                       <TableCell>{result.term}</TableCell>
                       <TableCell className="text-center">{result.ca_score}</TableCell>
                       <TableCell className="text-center">{result.exam_score}</TableCell>
-                      <TableCell className="text-center font-semibold">{result.total_score}</TableCell>
+                      <TableCell className="text-center font-semibold">{result.total}</TableCell>
                       <TableCell className="text-center">
                         <Badge className={getGradeColor(result.grade)}>{result.grade}</Badge>
                       </TableCell>

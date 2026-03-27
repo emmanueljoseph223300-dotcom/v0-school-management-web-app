@@ -19,21 +19,32 @@ export default async function StudentResultsPage() {
   const { data: results } = await supabase
     .from("results")
     .select(`
-      *,
+      id,
+      student_id,
+      subject_id,
+      class_id,
+      term,
+      session,
+      ca_score,
+      exam_score,
+      total,
+      grade,
+      remarks,
+      created_at,
       subject:subject_id (id, name)
     `)
     .eq("student_id", user?.id)
     .order("created_at", { ascending: false })
 
-  // Calculate statistics
+  // Calculate statistics using total field from database
   const totalResults = results?.length || 0
   const averageScore = totalResults > 0
-    ? Math.round((results?.reduce((sum, r) => sum + (r.score || 0), 0) || 0) / totalResults)
+    ? Math.round((results?.reduce((sum, r) => sum + (r.total || 0), 0) || 0) / totalResults)
     : 0
   const highestScore = totalResults > 0
-    ? Math.max(...(results?.map(r => r.score) || [0]))
+    ? Math.max(...(results?.map(r => r.total || 0) || [0]))
     : 0
-  const passingResults = results?.filter(r => r.score >= 50).length || 0
+  const passingResults = results?.filter(r => (r.total || 0) >= 50).length || 0
 
   const stats = [
     { title: "Total Results", value: totalResults, icon: ClipboardList, color: "text-blue-600" },
@@ -42,11 +53,11 @@ export default async function StudentResultsPage() {
     { title: "Pass Rate", value: totalResults > 0 ? `${Math.round((passingResults / totalResults) * 100)}%` : "N/A", icon: AlertCircle, color: "text-orange-600" },
   ]
 
-  const getScoreBadge = (score: number) => {
-    if (score >= 80) return { variant: "default" as const, label: "Excellent" }
-    if (score >= 70) return { variant: "default" as const, label: "Good" }
-    if (score >= 60) return { variant: "secondary" as const, label: "Average" }
-    if (score >= 50) return { variant: "secondary" as const, label: "Pass" }
+  const getScoreBadge = (total: number) => {
+    if (total >= 80) return { variant: "default" as const, label: "Excellent" }
+    if (total >= 70) return { variant: "default" as const, label: "Good" }
+    if (total >= 60) return { variant: "secondary" as const, label: "Average" }
+    if (total >= 50) return { variant: "secondary" as const, label: "Pass" }
     return { variant: "destructive" as const, label: "Needs Improvement" }
   }
 
@@ -86,30 +97,30 @@ export default async function StudentResultsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Subject</TableHead>
-                  <TableHead>Exam Type</TableHead>
-                  <TableHead>Score</TableHead>
+                  <TableHead>Term / Session</TableHead>
+                  <TableHead>CA Score</TableHead>
+                  <TableHead>Exam Score</TableHead>
+                  <TableHead>Total</TableHead>
                   <TableHead>Grade</TableHead>
-                  <TableHead>Date</TableHead>
                   <TableHead>Remarks</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {results.map((result) => {
-                  const badge = getScoreBadge(result.score)
+                  const badge = getScoreBadge(result.total || 0)
                   return (
                     <TableRow key={result.id}>
                       <TableCell className="font-medium">{result.subject?.name}</TableCell>
-                      <TableCell>{result.exam_type}</TableCell>
+                      <TableCell>{result.term} - {result.session}</TableCell>
+                      <TableCell>{result.ca_score}</TableCell>
+                      <TableCell>{result.exam_score}</TableCell>
                       <TableCell>
-                        <span className={`font-semibold ${result.score >= 50 ? "text-green-600" : "text-red-600"}`}>
-                          {result.score}%
+                        <span className={`font-semibold ${(result.total || 0) >= 50 ? "text-green-600" : "text-red-600"}`}>
+                          {result.total}%
                         </span>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={badge.variant}>{badge.label}</Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(result.created_at).toLocaleDateString()}
+                        <Badge variant={badge.variant}>{result.grade || badge.label}</Badge>
                       </TableCell>
                       <TableCell className="text-muted-foreground max-w-[200px] truncate">
                         {result.remarks || "-"}
